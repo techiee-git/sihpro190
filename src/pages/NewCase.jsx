@@ -1,0 +1,13 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Icon } from '../components/Icon';
+
+export function NewCase() {
+  const [form, setForm] = useState({ title: '', type: '', fir: '', description: '' });
+  const [checked, setChecked] = useState(false);
+  const [errors, setErrors] = useState({});
+  const update = event => setForm(current => ({ ...current, [event.target.name]: event.target.value }));
+  const checkFields = event => { event.preventDefault(); const next = {}; if (!form.title.trim()) next.title = 'Enter a case title.'; if (!form.type) next.type = 'Select a case type.'; setErrors(next); setChecked(true); };
+  return <div className="dashboard form-page"><div className="form-page-heading"><div><p className="eyebrow">CASE WORKSPACE</p><h1>New Case</h1><p className="page-subtitle">Prototype layout for a future case creation workflow.</p></div><Link className="back-to-cases" to="/cases"><Icon name="chevronLeft" size={16} />Back to My Cases</Link></div>
+    <form className="panel form-panel" onSubmit={checkFields} noValidate aria-describedby="case-form-help"><div className="panel-heading"><h2>Case details</h2><p id="case-form-help">Values stay in this form only. No case will be created or saved.</p></div><div className="form-fields"><label>Case title<input name="title" value={form.title} onChange={update} aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? 'case-title-error' : undefined} />{errors.title && <span id="case-title-error" className="field-error">{errors.title}</span>}</label><label>Case type<select name="type" value={form.type} onChange={update} aria-invalid={Boolean(errors.type)}><option value="">Select a type</option><option>General investigation</option><option>Digital investigation</option><option>Other</option></select>{errors.type && <span className="field-error">{errors.type}</span>}</label><label>FIR reference <span className="optional-label">(optional)</span><input name="fir" value={form.fir} onChange={update} /></label><label>Description <span className="optional-label">(optional)</span><textarea name="description" value={form.description} onChange={update} rows="5" /></label></div><div className="form-actions"><button className="check-fields-btn" type="submit"><Icon name="checklist" size={16} />Check fields</button><Link className="cancel-link" to="/cases">Cancel</Link><button className="disabled-submit" disabled>Create case</button></div>{checked && <p className={`validation-message ${Object.keys(errors).length ? 'has-errors' : ''}`} role="status">{Object.keys(errors).length ? 'Check the highlighted fields.' : 'Fields are valid locally. Case creation is unavailable.'}</p>}</form></div>;
+}

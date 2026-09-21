@@ -1,0 +1,4 @@
+# esbuild's platform binary is supplied through its optional dependency.
+# No dependency lifecycle scripts are needed for this frontend.
+ignoredBuiltDependencies:
+  - esbuild
